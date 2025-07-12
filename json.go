@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 )
@@ -25,4 +26,13 @@ func jsonResponse(w http.ResponseWriter, code int, payload interface{}){
 	}
 	w.WriteHeader(code)
 	w.Write(data)
+}
+
+func decodeJSON(payload io.Reader, params interface{}) (error) {
+	decoder := json.NewDecoder(payload)
+	err := decoder.Decode(params)
+	if err != nil {
+		return err
+	}
+	return nil
 }
