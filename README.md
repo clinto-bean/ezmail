@@ -95,10 +95,10 @@ I welcome any contributions, please feel free to fork the repo, open issues and 
 2. Create your feature branch (git checkout -b feature/foo)
 3. Commit your changes (git commit -am 'Add foo')
 4. Push to the branch (git push origin feature/foo)
-5. Open a PR. View the (GitHub Documentation)[https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request] for guidance.
+5. Open a PR. View the [GitHub Documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) for guidance.
 
 ---
 
 ## License
 
-EzMail is released under the (MIT License)[/LICENSE]
+EzMail is released under the [MIT License](/LICENSE)
