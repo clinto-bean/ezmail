@@ -17,12 +17,13 @@ type User struct {
 }
 
 type UserParams struct {
-Username string `json:"username"`
+		Username string `json:"username"`
 		EmailAddress string `json:"email"`
 		DOB time.Time `json:"dob"`
 		ID uuid.UUID
 }
 
+// function validates that user is over the age of 18 and will return an error if not
 func validateUserAge(dob time.Time) error {
 	now := time.Now()
 	ageThreshold := now.AddDate(-18,0,0)
@@ -34,18 +35,18 @@ func validateUserAge(dob time.Time) error {
 
 // User functions
 // createUser takes in a username and email string as well as an ISO 8601 formatted date for the date of birth
-func createUser(username, emailAddress string, dob time.Time) (error, User) {
+func createUser(username, emailAddress string, dob time.Time) (User, error) {
 	err := validateUserAge(dob)
 	if err != nil {
-		return err, User{}
+		return User{}, err
 	}
-	return nil, User{
+	return  User{
 		ID: uuid.New(), 
 		Username: username, 
 		EmailAddress: emailAddress, 
 		RegisteredAt: time.Now(),
 		DOB: dob, 
-	}
+	}, nil
 }
 
 func modifyUser(username, emailAddress string, id uuid.UUID) (error, User) {
@@ -53,7 +54,7 @@ func modifyUser(username, emailAddress string, id uuid.UUID) (error, User) {
 }
 
 // User API Methods
-// handlerCreateUser will attempt to call createUser with the request body's data 
+// handleUser will determine the correct handler based on the request's http method
 func (a *API) handleUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		// query db for user
@@ -66,20 +67,21 @@ func (a *API) handleUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handlerCreateUser will attempt to call createUser with the request body's data 
 func (a *API) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
 	params := UserParams{}
 	err := decodeJSON(r.Body, &params)
 	if err != nil {
 		errorResponse(w, 400, "bad request parameters")
 	}
-	err, u := createUser(params.Username, params.EmailAddress, params.DOB)
+	u, err := createUser(params.Username, params.EmailAddress, params.DOB)
 	if err != nil {
 		errorResponse(w, 400, "user must be at least 18 years old to register")
 	} else {
 		jsonResponse(w, 200, u)
 	}
 }
-
+// handlerModifyUser will attempt to modify the user's profile and return the user if successful
 func (a *API) handlerModifyUser(w http.ResponseWriter, r *http.Request) {
 	params := UserParams{}
 	err := decodeJSON(r.Body, &params)
