@@ -17,10 +17,10 @@ type User struct {
 }
 
 type UserParams struct {
-		Username string `json:"username"`
-		EmailAddress string `json:"email"`
-		DOB time.Time `json:"dob"`
-		ID uuid.UUID
+	Username string `json:"username"`
+	EmailAddress string `json:"email"`
+	DOB time.Time `json:"dob"`
+	ID uuid.UUID
 }
 
 // function validates that user is over the age of 18 and will return an error if not

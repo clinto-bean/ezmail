@@ -17,11 +17,13 @@ func (a *API) Start() error {
 	r := mux.NewRouter()
 	r.Use(middlewareCORS)
 	r.Use(middlewareLogging)
+
 	// status checker handlers
 	r.HandleFunc("/v1/shutdown", a.gracefulShutdown)
 	r.HandleFunc("/v1/ping", a.checkAPIStatus)
+	
 	// user handlers
-	r.HandleFunc("/v1/users/new", a.handleUser)
+	r.HandleFunc("/v1/users", a.handleUser)
 	srv := &http.Server{
 		Addr: ":" + a.port,
 		Handler: r,
